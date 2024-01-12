@@ -1,4 +1,4 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import React, {ChangeEvent,  KeyboardEvent, useState} from 'react';
 import styled from "styled-components";
 import {filterValuesType} from "../../App";
 
@@ -16,6 +16,7 @@ type TodoListPropsType = {
     removeTask: (taskId: string) => void
     changeFilter: (value: filterValuesType) => void
     addTask: (title: string) => void
+    changeStatus: (taskId:string,isDone:boolean)=> void
 };
 export const TodoList = (props: TodoListPropsType) => {
     const [newTaskTite, setNewTaskTitle] = useState("");
@@ -37,6 +38,7 @@ export const TodoList = (props: TodoListPropsType) => {
     const onAllClickHandler = ()=> props.changeFilter("all")
     const onActiveClickHandler = ()=> props.changeFilter("active")
     const onCompletedClickHandler = ()=> props.changeFilter("completed")
+
     return (
         <Card>
             <h3>{props.title}</h3>
@@ -48,9 +50,11 @@ export const TodoList = (props: TodoListPropsType) => {
                 {
                     props.tasks.map((t,) => {
                         const onRemoveHandler = ()=>{props.removeTask(t.id)}
+                        const onChangeHandler = (e:ChangeEvent<HTMLInputElement>)=> {
+                            props.changeStatus(t.id, e.currentTarget.checked)}
                         return (
                             <Item key={t.id}>
-                                <input type={"checkbox"} checked={t.isDone}/>
+                                <input onChange={onChangeHandler} type={"checkbox"} checked={t.isDone}/>
                                 <span>{t.title} </span>
                                 <button onClick={onRemoveHandler}>x</button>
                             </Item>
